@@ -1,0 +1,53 @@
+import React, {useEffect, useState} from 'react';
+import {View, Text, BackHandler} from 'react-native';
+import TouchID from 'react-native-touch-id';
+
+const App = () => {
+  const [isAuth, setIsAuth] = useState(false);
+
+  const optionalConfigObject = {
+    title: 'Authentication Required', 
+    imageColor: '#e00606', 
+    imageErrorColor: '#ff0000', 
+    sensorDescription: 'Touch sensor', 
+    sensorErrorDescription: 'Failed', 
+    cancelText: 'Cancel',
+    fallbackLabel: 'Show Passcode', 
+    unifiedErrors: false, 
+    passcodeFallback: false, 
+  };
+
+  useEffect(() => {
+    handleBiometric();
+  });
+
+  const handleBiometric = () => {
+    TouchID.isSupported(optionalConfigObject).then(biometricType => {
+      if (biometricType === 'FaceID') {
+        console.log('FaceID is supported.');
+      } else {
+        console.log('TouchID is supported.');
+        if (isAuth) {
+          return null;
+        }
+        TouchID.authenticate('', optionalConfigObject)
+          .then(success => {
+            console.log('Success', success);
+            setIsAuth(success);
+          })
+          .catch(err => {
+            console.log('Error', err);
+            BackHandler.exitApp();
+          });
+      }
+    });
+  };
+
+  return (
+    <View>
+      <Text>React Native Biometric Test</Text>
+    </View>
+  );
+};
+
+export default App;
