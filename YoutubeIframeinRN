@@ -1,0 +1,99 @@
+import React, {useState, useRef} from 'react';
+import {View, Alert, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import YoutubePlayer from 'react-native-youtube-iframe';
+//import {Icon, Text} from 'react-native-elements';
+
+const App = () => {
+  const [playing, setPlaying] = useState(false);
+  const [isMute, setMute] = useState(false);
+  const controlRef = useRef();
+
+  const onStateChange = state => {
+    if (state === 'ended') {
+      setPlaying(false);
+      Alert.alert('video has finished playing!');
+    }
+    if (state !== 'playing') {
+      setPlaying(false);
+    }
+  };
+
+  const togglePlaying = () => {
+    setPlaying(prev => !prev);
+  };
+
+  const seekBackAndForth = control => {
+    console.log('currentTime');
+    controlRef.current?.getCurrentTime().then(currentTime => {
+      control === 'forward'
+        ? controlRef.current?.seekTo(currentTime + 15, true)
+        : controlRef.current?.seekTo(currentTime - 15, true);
+    });
+  };
+
+  const muteVideo = () => setMute(!isMute);
+
+  const ControlIcon = ({name, onPress}) => (
+    <Icon onPress={onPress} name={name} size={40} color="#fff" />
+  );
+
+  return (
+    <View>
+      <YoutubePlayer
+        height={300}
+        ref={controlRef}
+        play={playing}
+        mute={isMute}
+        videoId={'84WIaK3bl_s'}
+        onChangeState={onStateChange}
+      />
+      <View style={styles.controlContainer}>
+        <TouchableOpacity onPress={() => seekBackAndForth('rewind')}>
+          <Text style={{fontSize: 40}}>⏮️ </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={togglePlaying}>
+          <Text style={{fontSize: 40}}>{playing ? '⏸️' : '▶️'}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => seekBackAndForth('forward')}>
+          <Text style={{fontSize: 40}}>⏩ </Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <TouchableOpacity
+          onPress={muteVideo}
+          style={{
+            alignSelf: 'center',
+            marginTop: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 40}}>{isMute ? '🔊 ' : '🔇 '}</Text>
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 17,
+            marginTop: 50,
+            alignSelf: 'center',
+            justifyContent: 'center',
+          }}>
+          YoutubePlayer in React Native{' '}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'darkblue',
+  },
+  controlContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+});
