@@ -1,0 +1,36 @@
+import React, {useState, useEffect} from 'react';
+import {View, Text} from 'react-native';
+
+const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [dots, setDots] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots(prevDots => (prevDots + 1) % 4);
+    }, 500);
+
+    // Simulate fetching data
+    setTimeout(() => {
+      // Assume data has been fetched
+      setData('Fetched Data');
+      setIsLoading(false);
+      clearInterval(interval);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+      {isLoading ? (
+        <Text style={{color: '#000'}}>Loading{'.'.repeat(dots)}</Text>
+      ) : (
+        <Text style={{color: '#000'}}>{data}</Text>
+      )}
+    </View>
+  );
+};
+
+export default App;
