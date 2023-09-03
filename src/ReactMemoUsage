@@ -1,0 +1,80 @@
+App.js
+
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import CounterComp from './reusableComponent/CounterComp';
+
+const App = () => {
+  const [number, setNumber] = useState(0);
+  const [randomNumber, setrandomNumber] = useState(0);
+
+  const onDecrement = useCallback(() => {
+    setNumber(number - 1);
+  }, [number]);
+
+  const onIncrement = useCallback(() => {
+    setNumber(number + 1);
+  }, [number]);
+
+  const onrandomNumber = useCallback(() => {
+    setrandomNumber(Math.random());
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <View style={{alignContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.textStyle}>React.Memo Usage</Text>
+        <Text style={styles.textStyle} onPress={onrandomNumber}>
+          {randomNumber}
+        </Text>
+        <TouchableOpacity onPress={onDecrement}>
+          <Text style={styles.textStyle}>-</Text>
+        </TouchableOpacity>
+        <CounterComp number={number} />
+        <TouchableOpacity onPress={onIncrement}>
+          <Text style={styles.textStyle}>+</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textStyle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+});
+
+==================================================
+
+CounterComp.js
+
+import {Text} from 'react-native';
+import React from 'react';
+
+const CounterComp = ({number = 0}) => {
+  console.log('counter comp re-render', number);
+  return (
+    <Text style={{fontSize: 20, fontWeight: 'bold', color: '#000'}}>
+      {number}
+    </Text>
+  );
+};
+
+export default React.memo(CounterComp);
+//React.memo prevents components re-rendering unnecessarily
