@@ -1,0 +1,78 @@
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useCallback, useMemo, useState} from 'react';
+import CounterComp from './reusableComponent/CounterComp';
+
+const App = () => {
+  const [number, setNumber] = useState(0);
+  const [randomNumber, setrandomNumber] = useState(0);
+
+  const onDecrement = useCallback(() => {
+    //memoized function
+    setNumber(number - 1);
+  }, [number]);
+
+  const onIncrement = useCallback(() => {
+    //memoized function
+    setNumber(number + 1);
+  }, [number]);
+
+  const onrandomNumber = useCallback(() => {
+    setrandomNumber(Math.random());
+  }, []);
+
+  const expensiveCalculation = num => {
+    console.log('Calculating...');
+    for (let i = 0; i < 1000000; i++) {
+      num += 1;
+    }
+    return num;
+  };
+
+  const calculation = useMemo(() => expensiveCalculation(number), [number]);
+
+  return (
+    <View style={styles.container}>
+      <View style={{alignContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.textStyle}>useMemoUsage</Text>
+        <Text style={styles.textStyle}>Random Number</Text>
+        <Text style={styles.textStyle} onPress={onrandomNumber}>
+          {randomNumber}
+        </Text>
+
+        <TouchableOpacity onPress={onDecrement}>
+          <Text style={styles.textStyle}>-</Text>
+        </TouchableOpacity>
+
+        <Text>Memorized value</Text>
+        <Text>{calculation}</Text>
+        {/* <CounterComp //memoized component
+          number={number}
+        /> */}
+        <TouchableOpacity onPress={onIncrement}>
+          <Text style={styles.textStyle}>+</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textStyle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+});
