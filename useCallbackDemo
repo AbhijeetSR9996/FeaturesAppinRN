@@ -1,0 +1,52 @@
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
+
+const App = () => {
+  const [number, setNumber] = useState(0);
+
+  const onDecrement = useCallback(() => {
+    setNumber(number - 1);
+  }, [number]);
+
+  const onIncrement = useCallback(() => {
+    setNumber(number + 1);
+  }, [number]);
+
+  const thirdFunction = () => {};
+
+  return (
+    <View style={styles.container}>
+      <View style={{alignContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.textStyle}>useCallback Demo</Text>
+        <TouchableOpacity onPress={onDecrement}>
+          <Text style={styles.textStyle}>-</Text>
+        </TouchableOpacity>
+        <Text style={styles.textStyle}>{number}</Text>
+        <TouchableOpacity onPress={onIncrement}>
+          <Text style={styles.textStyle}>+</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textStyle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+});
