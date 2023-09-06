@@ -1,0 +1,33 @@
+import React from 'react';
+import {Text, View, Dimensions} from 'react-native';
+import {moderateScale} from 'react-native-size-matters';
+import {WebView} from 'react-native-webview';
+
+const {height, width} = Dimensions.get('screen');
+
+const Home = () => {
+  return (
+    <View
+      style={{flex: 1, justifyContent: 'space-between', alignItems: 'center'}}>
+      <Text style={{color: '#000', fontWeight: 'bold'}}>DATA OF WEBVIEW </Text>
+      <View>
+        <WebView
+          source={{uri: 'https://dummyjson.com/products'}}
+          onLoad={() => console.log('WebView loaded')}
+          onError={error => console.error('WebView error: ', error)}
+          style={{
+            flex: 1,
+            height: height,
+            width: width,
+            marginHorizontal: moderateScale(10),
+          }}
+          javaScriptEnabled={true}
+          startInLoadingState={true}
+          scalesPageToFit={true}
+        />
+      </View>
+    </View>
+  );
+};
+
+export default Home;
