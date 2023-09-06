@@ -1,0 +1,46 @@
+useNavigation.js
+
+import {useState, useEffect} from 'react';
+import {Dimensions} from 'react-native';
+
+export const useOrientation = () => {
+  const [orientation, setOrientation] = useState('PORTRAIT');
+
+  const handleOrientationChange = ({screen}) => {
+    if (screen.width > screen.height) {
+      setOrientation('LANDSCAPE');
+    } else {
+      setOrientation('PORTRAIT');
+    }
+  };
+
+  useEffect(() => {
+    Dimensions.addEventListener('change', handleOrientationChange);
+
+    return () => {
+      Dimensions.removeEventListener('change', handleOrientationChange);
+    };
+  }, []);
+
+  return orientation;
+};
+
+====================
+
+Home.js
+
+import React from 'react';
+import {View, Text} from 'react-native';
+import {useOrientation} from '../../components/UseNavigation';
+
+const Home = () => {
+  const orientation = useOrientation();
+
+  return (
+    <View>
+      <Text>Current Orientation: {orientation}</Text>
+    </View>
+  );
+};
+
+export default Home;
