@@ -1,0 +1,75 @@
+App.js
+
+import React, {useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import CustomLoading from './reusableComponent/CustomLoading';
+
+const App = () => {
+  const [loading, setLoading] = useState(false);
+
+  // Simulate loading for demonstration purposes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Facebook based Loading in RN </Text>
+      <TouchableOpacity style={styles.button} onPress={() => setLoading(true)}>
+        <Text>Show Loading</Text>
+      </TouchableOpacity>
+
+      {loading && <CustomLoading />}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#1877f2',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+});
+
+export default App;
+
+===========================
+CustomLoading.js
+
+
+import React from 'react';
+import {View, ActivityIndicator, StyleSheet} from 'react-native';
+
+const CustomLoading = () => {
+  return (
+    <View style={styles.overlay}>
+      <ActivityIndicator size="large" color="#1877f2" />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+export default CustomLoading;
