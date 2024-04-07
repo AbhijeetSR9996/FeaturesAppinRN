@@ -1,0 +1,134 @@
+Routes.js
+
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MainStack from './MainStack';
+
+const Stack = createNativeStackNavigator();
+
+function Routes() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        {MainStack(Stack)}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default Routes;
+
+-------------------------------
+TabRoutes.js
+
+import React from 'react';
+import {Home, Profile, Explore} from '../Screens';
+import navigationStrings from '../constants/navigationStrings';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Image} from 'react-native';
+import imagePath from '../constants/imagePath';
+
+const Tab = createBottomTabNavigator();
+
+function TabRoutes() {
+  return (
+    <Tab.Navigator
+      initialRouteName={navigationStrings.HOME}
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: 'blue',
+        tabBarInactiveTintColor: 'gray',
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: 'relative',
+          backgroundColor: 'pink',
+          borderRadius: 30,
+          bottom: 20,
+          marginHorizontal: 16,
+        },
+      }}>
+      <Tab.Screen
+        name={navigationStrings.HOME}
+        component={Home}
+        options={{
+          tabBarIcon: ({focused}) => {
+            return (
+              <Image
+                style={{
+                  tintColor: focused ? 'blue' : 'gray',
+                }}
+                source={imagePath.icHome}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name={navigationStrings.EXPLORE}
+        component={Explore}
+        options={{
+          tabBarIcon: ({focused}) => {
+            return (
+              <Image
+                style={{
+                  tintColor: focused ? 'blue' : 'gray',
+                }}
+                source={imagePath.icExplore}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name={navigationStrings.PROFILE}
+        component={Profile}
+        options={{
+          tabBarIcon: ({focused}) => {
+            return (
+              <Image
+                style={{
+                  tintColor: focused ? 'blue' : 'gray',
+                }}
+                source={imagePath.icProfile}
+              />
+            );
+          },
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+export default TabRoutes;
+----------------------------------------------
+imagePath.js
+
+export default {
+  icHome: require('../assets/images/location.png'),
+  icProfile: require('../assets/images/profile.png'),
+  icExplore: require('../assets/images/view.png'),
+};
+---------------------------------------------------
+navigationStrings.js
+
+export default {
+  HOME: 'home',
+  PROFILE: 'Profile',
+  EXPLORE: 'Explore',
+  TABS: 'Tabs',
+};
+------------------------------------------------
+MainStack.js
+
+import React from 'react';
+import navigationStrings from '../constants/navigationStrings';
+import TabRoutes from './TabRoutes';
+
+export default function (Stack) {
+  return (
+    <>
+      <Stack.Screen name={navigationStrings.TABS} component={TabRoutes} />
+    </>
+  );
+}
